@@ -1130,6 +1130,20 @@ update
 
 単一headのSelf-Attentionです。
 
+コードの中では、次の順番でテンソルが流れます。
+
+```mermaid
+flowchart LR
+    X["x<br/>[batch_size, seq_len, d_model]"] --> Q["w_q(x)<br/>q"]
+    X --> K["w_k(x)<br/>k"]
+    X --> V["w_v(x)<br/>v"]
+    Q --> S["q @ k.transpose<br/>scores: [batch_size, seq_len, seq_len]"]
+    K --> S
+    S --> W["softmax<br/>weights: [batch_size, seq_len, seq_len]"]
+    W --> O["weights @ v<br/>out: [batch_size, seq_len, d_model]"]
+    V --> O
+```
+
 ```python
 import torch
 import torch.nn as nn

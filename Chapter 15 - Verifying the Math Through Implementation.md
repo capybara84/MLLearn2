@@ -1946,6 +1946,21 @@ x = x + Attention(LayerNorm(x))
 x = x + FeedForward(LayerNorm(x))
 ```
 
+図にすると、Pre-LNのTransformer blockは次の流れになります。
+
+```mermaid
+flowchart LR
+    X["x"] --> LN1["LayerNorm"]
+    LN1 --> ATT["Self-Attention"]
+    ATT --> ADD1["残差接続<br/>x + Attention(...)"]
+    X --> ADD1
+    ADD1 --> LN2["LayerNorm"]
+    LN2 --> FFN["Feed Forward"]
+    FFN --> ADD2["残差接続<br/>x + FeedForward(...)"]
+    ADD1 --> ADD2
+    ADD2 --> Y["出力"]
+```
+
 まず、SelfAttentionを用意します。
 
 ```python

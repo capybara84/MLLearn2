@@ -540,6 +540,19 @@ loss = 各位置のlossの平均
 
 つまり、言語モデルのcross entropy lossは、ざっくり言えば次のようなものです。
 
+入力と正解を1つずらし、各位置の予測をまとめてlossにする流れは次の通りです。
+
+```mermaid
+flowchart LR
+    A["token ids<br/>[12, 45, 98, 3]"] --> B["inputs<br/>[12, 45, 98]"]
+    A --> C["targets<br/>[45, 98, 3]"]
+    B --> D["model"]
+    D --> E["logits<br/>[seq_len, vocab_size]"]
+    E --> F["cross entropy"]
+    C --> F
+    F --> G["loss"]
+```
+
 ```text
 各位置で、正解の次トークンにどれだけ高い確率を出せたかを見る
 ```

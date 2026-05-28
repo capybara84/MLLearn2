@@ -702,6 +702,15 @@ Transformerを学ぶと、いくつかのshapeが何度も出てきます。
 各トークンは4次元ベクトル
 ```
 
+この流れを図にすると、次のようになります。
+
+```mermaid
+flowchart LR
+    A["token_ids<br/>[batch_size, seq_len]"] --> B["Embedding"]
+    B --> C["x<br/>[batch_size, seq_len, d_model]"]
+    C --> D["各トークンが<br/>d_model次元ベクトルになる"]
+```
+
 PyTorchで書くと、次のようになります。
 
 ```python

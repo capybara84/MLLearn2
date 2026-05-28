@@ -64,6 +64,17 @@ gradient: lossに対する勾配
 
 です。
 
+勾配降下法の流れを図にすると、次のようになります。
+
+```mermaid
+flowchart LR
+    P["parameter"] --> F["forward<br/>予測を計算する"]
+    F --> L["loss<br/>誤差を計算する"]
+    L --> G["gradient<br/>lossが増えやすい方向"]
+    G --> U["update<br/>逆方向に少し動かす"]
+    U --> P
+```
+
 たとえば、あるパラメータ `w` があるとします。
 
 ```text

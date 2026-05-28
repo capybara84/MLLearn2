@@ -833,6 +833,17 @@ QK^T: [seq_len, d_k] @ [d_k, seq_len]
 
 になります。
 
+図にすると、`K` を転置してから `Q` と掛けることで、トークン同士の表ができます。
+
+```mermaid
+flowchart LR
+    Q["Q<br/>[seq_len, d_k]"] --> M["行列積"]
+    K["K<br/>[seq_len, d_k]"] --> T["転置<br/>K^T: [d_k, seq_len]"]
+    T --> M
+    M --> S["scores<br/>[seq_len, seq_len]"]
+    S --> R["各Queryが<br/>各Keyをどれくらい見るか"]
+```
+
 この `[seq_len, seq_len]` は、トークン同士の相性スコア表です。
 
 たとえば、`seq_len = 4` なら、shapeは次のようになります。

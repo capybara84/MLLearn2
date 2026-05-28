@@ -577,6 +577,17 @@ token_2の平均と分散を計算して正規化する
 
 つまり、トークンごとに、そのベクトルの中で正規化するということです。
 
+図にすると、`batch_size` や `seq_len` 方向ではなく、各トークンの `d_model` 方向を整える操作です。
+
+```mermaid
+flowchart LR
+    X["x<br/>[batch_size, seq_len, d_model]"] --> V["各トークンの<br/>ベクトルを取り出す"]
+    V --> M["d_model方向で<br/>mean と variance を計算"]
+    M --> N["(x - mean) / sqrt(variance + eps)"]
+    N --> G["gamma と beta で調整"]
+    G --> Y["LayerNorm(x)<br/>shapeは同じ"]
+```
+
 ここが、Batch Normalizationとは違う点です。
 
 Batch Normalizationは、バッチ方向の統計量を使うことがあります。

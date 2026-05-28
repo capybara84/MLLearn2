@@ -42,6 +42,18 @@ softmaxで重みに変換する
 その重みでValueを混ぜる
 ```
 
+この流れを図にすると、次のようになります。
+
+```mermaid
+flowchart LR
+    X["入力x"] --> QKV["線形変換で<br/>Q / K / V を作る"]
+    QKV --> S["QK^T<br/>相性スコア"]
+    S --> C["sqrt(d_k)で割る"]
+    C --> W["softmax<br/>見る重み"]
+    W --> M["重みに応じて<br/>Valueを混ぜる"]
+    M --> O["Attention出力"]
+```
+
 もっと短く言えば、次のようになります。
 
 ```text
@@ -1233,6 +1245,15 @@ love の位置:
 ```
 
 これは、各位置が自分より未来の位置を見ないようにするmaskです。
+
+maskを使うと、Attention scoreから未来の位置が消えます。
+
+```mermaid
+flowchart LR
+    S["scores<br/>全位置が見える"] --> M["causal mask<br/>未来位置を -inf にする"]
+    M --> W["softmax"]
+    W --> Z["未来トークンへの重みは0"]
+```
 
 Attention scoreに対して、見てはいけない位置を非常に小さい値にします。
 
