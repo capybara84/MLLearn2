@@ -1,0 +1,142 @@
+有名な論文『Attention Is All You Need』を理解して、自分でTransformerを実装できるようになりたい。
+
+理解するためにはどんな勉強が必要か。
+下はChatGPT 5.5 Thinkingの回答。このうち、「機械学習の基本」を教科書として作った。
+次は、数学の最低限：ベクトル、行列、内積、softmax、微分、確率分布。の教科書をつくろう。
+
+---
+あれは「Transformerの論文」ではあるけど、前提としてかなり多くの知識を知っている人向けに書かれています。
+
+まず結論からいうと、読むために必要なのは大きくこの順番です。
+
+1. 機械学習の基本
+2. ニューラルネットワークの基本
+3. 自然言語処理の基本
+4. RNN / LSTM / seq2seq / Attention の流れ
+5. Transformer の構成要素
+6. 論文の読み方
+
+特に重要なのは、いきなり Transformer を理解しようとしないことです。Transformer は「それ以前の自然言語処理モデルへの不満」から出てきたので、RNN や seq2seq を知らないと、なぜすごいのかが見えにくいです。
+
+まず必要なのは、機械学習の超基本です。
+
+「入力 x から出力 y を予測する」「誤差を計算する」「誤差が小さくなるように重みを更新する」という考え方を理解する必要があります。ここでは、教師あり学習、損失関数、勾配降下法、過学習、訓練データとテストデータ、パラメータとハイパーパラメータ、あたりがわかれば十分です。
+
+数学としては、最初は高校数学レベル＋少しの線形代数でよいです。行列、ベクトル、内積、softmax、微分の雰囲気がわかれば、Transformer の論文を読む下地になります。厳密な証明までは不要です。
+
+次にニューラルネットワークです。
+
+ニューラルネットワークは、雑にいうと「行列計算を何層も重ねて、入力を別の表現に変換していく仕組み」です。ここで必要なのは、全結合層、活性化関数、バックプロパゲーション、埋め込みベクトル、ミニバッチ学習、正則化、Dropout、Layer Normalization です。
+
+『Attention Is All You Need』では、これらが説明なしに出てきます。たとえば論文中の LayerNorm(x + Sublayer(x)) みたいな構造は、「残差接続」と「Layer Normalization」を知らないと意味がわかりません。
+
+その次に自然言語処理の基本です。
+
+文章をそのままニューラルネットワークには入れられないので、単語やトークンを数値ベクトルに変換します。ここで必要なのは、tokenization、word embedding、位置情報、語彙、one-hot、分散表現、言語モデル、翻訳タスク、系列データ、です。
+
+Transformer では特に「単語をベクトルにする」「文中の位置を表す」「次の単語や翻訳先の単語を予測する」という考え方が重要です。
+
+その後に、RNN / LSTM / seq2seq を軽く勉強するとよいです。
+
+ここは実装できるほど深くなくてよいです。重要なのは、「Transformer が何を置き換えたのか」を知ることです。
+
+以前の翻訳モデルでは、RNN や LSTM を使って、単語を左から右へ順番に読んでいました。しかしこの方式には、長い文の情報を扱いにくい、並列計算しにくい、遠く離れた単語同士の関係を扱いにくい、という問題がありました。
+
+そこで seq2seq と attention が出てきます。Attention は、翻訳するときに「入力文のどの単語を見るべきか」を重みづけする仕組みです。
+
+Transformer はさらに一歩進んで、「RNN をやめて、Attention だけでやる」という発想です。だからタイトルが “Attention Is All You Need” です。
+
+Transformer の構成要素としては、次を順に理解すればよいです。
+
+まず Self-Attention。
+これは、文の中の各トークンが、他のトークンをどのくらい参照するかを計算する仕組みです。
+
+たとえば「犬がボールを追いかけた。それは速かった」という文で、「それ」が何を指すかを考えるには、文中の別の単語を見る必要があります。Self-Attention は、それをベクトル計算でやります。
+
+次に Query / Key / Value。
+ここが最初の山です。
+
+ざっくりいうと、
+
+Query は「自分が探しているもの」
+Key は「自分が持っているラベル」
+Value は「実際に渡す中身」
+
+です。
+
+各単語が Query, Key, Value という3種類のベクトルに変換されます。そして Query と Key の相性を内積で計算し、どの Value をどれだけ取り込むかを決めます。
+
+次に Multi-Head Attention。
+これは Attention を複数並列に行う仕組みです。ひとつの Attention だけだと一種類の関係しか見にくいので、複数の head で、文法的関係、意味的関係、近い単語、遠い単語などを別々に見られるようにします。
+
+次に Positional Encoding。
+Transformer は RNN と違って単語を順番に読まないので、そのままだと語順がわかりません。そこで「このトークンは何番目にある」という位置情報をベクトルに足します。
+
+次に Encoder / Decoder。
+元論文の Transformer は機械翻訳用なので、Encoder が入力文を読み、Decoder が出力文を生成します。
+
+現在の LLM、たとえば GPT 系は主に Decoder-only Transformer です。BERT は Encoder-only Transformer です。なので、今の LLM を理解したい場合、論文の Transformer 全体を完全に理解する前に「Encoder-only / Decoder-only / Encoder-Decoder の違い」を押さえるとよいです。
+
+勉強順としては、こうです。
+
+まず「ニューラルネットワークとは何か」を理解する。
+次に「単語をベクトルにするとは何か」を理解する。
+次に「RNN / LSTM はなぜ使われたのか、何が弱かったのか」を理解する。
+次に「Attention は何を解決したのか」を理解する。
+最後に「Self-Attention と Transformer」を読む。
+
+最短ルートなら、こういう順番で十分です。
+
+第一段階：機械学習の基礎
+見るべきものは、教師あり学習、損失関数、勾配降下法、ニューラルネットワーク、バックプロパゲーション。
+
+第二段階：数学の最低限
+ベクトル、行列、内積、softmax、微分、確率分布。
+
+第三段階：NLP の基礎
+token、embedding、language model、seq2seq、機械翻訳。
+
+第四段階：Attention 以前
+RNN、LSTM、Encoder-Decoder、Attention mechanism。
+
+第五段階：Transformer
+Self-Attention、Q/K/V、Multi-Head Attention、Positional Encoding、Feed Forward Network、Residual Connection、LayerNorm、Encoder/Decoder。
+
+第六段階：現代 LLM
+Decoder-only Transformer、pretraining、fine-tuning、RLHF、instruction tuning、tokenizer、context length。
+
+『Attention Is All You Need』を読むときは、最初から全部読まなくていいです。おすすめはこの順番です。
+
+最初に Abstract と Introduction を読む。
+次に Figure 1 の Transformer 図だけを見る。
+次に 3.1 Encoder and Decoder Stacks を読む。
+次に 3.2 Attention を読む。
+最後に数式を見る。
+
+数式から入るとたぶん挫折します。先に「何をしているか」を日本語で理解してから、数式に戻るのがよいです。
+
+特に最初に理解すべき式はこれです。
+
+Attention(Q, K, V) = softmax(QK^T / sqrt(d_k)) V
+
+これは見た目ほど難しくありません。
+
+意味は、
+
+「Query と Key の相性を計算して、softmax で重みにして、その重みに応じて Value を混ぜる」
+
+です。
+
+Transformer の中心は、かなり乱暴にいえばこの一文です。
+
+「各単語が、文中の他の単語をどれくらい見るべきかを計算し、その情報を混ぜて新しい表現を作る」
+
+まずはここがわかれば十分です。
+
+最初から論文を精読するより、「Transformer を自分で小さく実装する」方向がかなり合うと思います。たとえば Python / PyTorch で、文字レベルの小さな言語モデルを作る。入力は「あいうえお」や簡単な英語テキストでよいです。モデルが次の文字を予測するところまで作ると、Attention の意味が一気にわかります。
+
+目標は「論文を一字一句理解する」ではなく、まずは次の説明が自分でできるようになることです。
+
+「Transformer は、単語列をベクトル列に変換し、Self-Attention によって各単語が他の単語の情報を参照し、Feed Forward Network で各位置の表現を加工し、それを何層も重ねて、最終的に次の単語や翻訳語を予測するモデルである」
+
+ここまで言えれば、『Attention Is All You Need』の骨格は理解できています。
