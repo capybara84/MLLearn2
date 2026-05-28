@@ -1148,6 +1148,17 @@ flowchart LR
     V --> O
 ```
 
+このコードを読むときは、次の表を横に置いておくとshapeを追いやすくなります。
+
+| 段階 | コード | shape | 意味 |
+|---|---|---|---|
+| 入力 | `x` | `[batch_size, seq_len, d_model]` | embedding後のトークン表現 |
+| Q/K/V | `q = self.w_q(x)`<br/>`k = self.w_k(x)`<br/>`v = self.w_v(x)` | `[batch_size, seq_len, d_model]` | Attention用の3種類の表現 |
+| score | `q @ k.transpose(-2, -1)` | `[batch_size, seq_len, seq_len]` | トークン同士の相性 |
+| scale | `scores / sqrt(d_k)` | `[batch_size, seq_len, seq_len]` | スコアの大きさを調整する |
+| weight | `torch.softmax(scores, dim=-1)` | `[batch_size, seq_len, seq_len]` | どのトークンをどれくらい見るか |
+| 出力 | `weights @ v` | `[batch_size, seq_len, d_model]` | Valueを混ぜた新しいトークン表現 |
+
 ```python
 import torch
 import torch.nn as nn

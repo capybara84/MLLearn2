@@ -58,6 +58,17 @@ flowchart LR
     M --> O["Attention出力"]
 ```
 
+同じ流れをshapeの表として見ると、次のようになります。
+
+| 段階 | 計算 | shape | 意味 |
+|---|---|---|---|
+| 入力 | `x` | `[batch_size, seq_len, d_model]` | 各トークンのベクトル |
+| Q/K/V | `w_q(x)`, `w_k(x)`, `w_v(x)` | `q`, `k`: `[batch_size, seq_len, d_k]`<br/>`v`: `[batch_size, seq_len, d_v]` | Attention用の3種類の表現を作る |
+| score | `q @ k.transpose(-2, -1)` | `[batch_size, seq_len, seq_len]` | 各Queryと各Keyの相性スコア |
+| scale | `scores / sqrt(d_k)` | `[batch_size, seq_len, seq_len]` | スコアの大きさを調整する |
+| weight | `softmax(scores, dim=-1)` | `[batch_size, seq_len, seq_len]` | 各Queryが各Keyをどれくらい見るか |
+| 出力 | `weights @ v` | `[batch_size, seq_len, d_v]` | Valueを重みに応じて混ぜた新しい表現 |
+
 もっと短く言えば、次のようになります。
 
 ```text
