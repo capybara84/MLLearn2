@@ -198,7 +198,7 @@ y = 11
 h = Linear(x)
 a = ReLU(h)
 logits = Linear(a)
-loss = CrossEntropy(logits, target)
+loss = cross_entropy(logits, target)
 ```
 
 これは、関数を順番につなげたものです。
@@ -211,7 +211,7 @@ h
 a
 ↓ Linear
 logits
-↓ CrossEntropy
+↓ cross entropy
 loss
 ```
 
@@ -225,7 +225,7 @@ x'
 x''
 ↓ Output Layer
 logits
-↓ Cross Entropy
+↓ cross entropy
 loss
 ```
 
@@ -244,7 +244,7 @@ scores
 ↓ softmax
 weights
 ↓ weights @ V
-attention output
+Attention output
 ↓ さらに次の層
 logits
 ↓ cross entropy
@@ -1242,7 +1242,7 @@ print(model.bias.grad)
 x
 ↓ Linear
 logits
-↓ CrossEntropy
+↓ cross entropy
 loss
 ```
 
@@ -1250,7 +1250,7 @@ backwardでは逆向きです。
 
 ```text
 loss
-↓ CrossEntropyの勾配
+↓ cross entropyの勾配
 ↓ logitsへの勾配
 ↓ Linearへの勾配
 ↓ weight, biasへの勾配

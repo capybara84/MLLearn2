@@ -1959,7 +1959,7 @@ flowchart LR
     ATT --> ADD1["残差接続<br/>x + Attention(...)"]
     X --> ADD1
     ADD1 --> LN2["LayerNorm"]
-    LN2 --> FFN["Feed Forward"]
+    LN2 --> FFN["Feed Forward Network"]
     FFN --> ADD2["残差接続<br/>x + FeedForward(...)"]
     ADD1 --> ADD2
     ADD2 --> Y["出力"]
@@ -2096,7 +2096,7 @@ Self-Attention
 ↓
 LayerNorm
 ↓
-Feed Forward
+Feed Forward Network
 ↓
 残差接続
 

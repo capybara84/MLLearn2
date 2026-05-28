@@ -14,4 +14,4 @@ python3 examples/04_transformer_block.py
 - `01_softmax.py`: softmaxがスコアを重みに変えることを確認する
 - `02_cross_entropy.py`: logits、targets、cross entropy lossの関係を確認する
 - `03_attention.py`: `Attention(Q, K, V) = softmax(QK^T / sqrt(d_k))V` を確認する
-- `04_transformer_block.py`: Self-Attention、LayerNorm、残差接続、Feed Forwardを組み合わせる
+- `04_transformer_block.py`: Self-Attention、LayerNorm、残差接続、Feed Forward Networkを組み合わせる
