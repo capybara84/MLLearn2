@@ -1414,6 +1414,30 @@ softmax後の各行の合計は1になる
 QK^T / sqrt(d_k) にsoftmaxをかけたものがAttention weightである
 ```
 
+### 確認問題
+
+`scores` が次のようなshapeのとき、Attentionではどの次元にsoftmaxをかけることが多いでしょうか。
+
+```text
+scores: [batch_size, seq_len, seq_len]
+```
+
+答えは、最後の次元です。
+
+```python
+weights = torch.softmax(scores, dim=-1)
+```
+
+`examples/01_softmax.py` を実行すると、softmax後の各行の合計が1になることを確認できます。
+
+### よくある誤解
+
+softmaxは「一番大きいものを1つ選ぶ」操作ではありません。
+
+1つ選ぶのはargmaxです。
+
+softmaxは、候補全体に重みを配る操作です。
+
 次章では、確率分布について学びます。
 
 softmaxの出力は、確率分布として解釈できます。

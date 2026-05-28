@@ -1571,4 +1571,27 @@ Attentionは、QueryとKeyの内積でトークン同士の相性スコアを作
 
 この説明ができて、対応するPyTorchコードを読めるなら、この数学編の目的は達成できています。
 
+### 最後の確認問題
+
+次のshapeを順番に埋めてください。
+
+```text
+x:       [batch_size, seq_len, d_model]
+q:       [batch_size, seq_len, d_model]
+k:       [batch_size, seq_len, d_model]
+scores:  ?
+weights: ?
+out:     ?
+```
+
+答えは次の通りです。
+
+```text
+scores:  [batch_size, seq_len, seq_len]
+weights: [batch_size, seq_len, seq_len]
+out:     [batch_size, seq_len, d_model]
+```
+
+`examples/04_transformer_block.py` を実行すると、Transformer blockの入力と出力でshapeが保たれることを確認できます。
+
 次は、ニューラルネットワークの基本に進むとよいです。

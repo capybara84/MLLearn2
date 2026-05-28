@@ -1654,6 +1654,28 @@ TransformerではLayerNormと残差接続が重要である
 LayerNormは深いネットワークの学習を安定させる
 ```
 
+### 確認問題
+
+次のshapeに `nn.LayerNorm(d_model)` をかけると、出力shapeはどうなりますか。
+
+```text
+x: [2, 5, 8]
+```
+
+答えは次の通りです。
+
+```text
+y: [2, 5, 8]
+```
+
+LayerNormは、基本的にshapeを変えません。
+
+### よくある誤解
+
+LayerNormは、batch方向に平均を取る操作ではありません。
+
+Transformerでよく使うLayerNormは、各トークンの `d_model` 次元方向を正規化します。
+
 次章では、いよいよAttentionの数式を読みます。
 
 ここまでに学んだ、

@@ -2239,6 +2239,35 @@ loss.backward()によって勾配が計算される
 optimizer.step()によってパラメータが更新される
 ```
 
+### 実行用サンプル
+
+この章の内容は、`examples/` のコードでも確認できます。
+
+```bash
+python3 examples/01_softmax.py
+python3 examples/02_cross_entropy.py
+python3 examples/03_attention.py
+python3 examples/04_transformer_block.py
+```
+
+本文を読んだあとにコードを実行すると、shapeと計算結果を対応づけやすくなります。
+
+### 確認問題
+
+次の2行は、それぞれAttentionの式のどの部分に対応しているでしょうか。
+
+```python
+weights = torch.softmax(scores, dim=-1)
+out = weights @ v
+```
+
+答えは次の通りです。
+
+```text
+weights = softmax(QK^T / sqrt(d_k))
+out = weights @ V
+```
+
 次章では、この数学編の最後として、Transformer実装に進む前の確認を行います。
 
 これまで学んだ内容をチェックリストとして整理し、次に「ニューラルネットワークの基本」または「Transformer実装」に進むための準備を確認します。

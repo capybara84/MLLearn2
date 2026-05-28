@@ -1326,6 +1326,34 @@ cross entropyは正解トークンの確率を見る
 PyTorchのcross_entropyにはlogitsを渡す
 ```
 
+### 確認問題
+
+次トークン予測で、次のトークン列があるとします。
+
+```text
+[12, 45, 98, 3]
+```
+
+`inputs` と `targets` はどう作ればよいでしょうか。
+
+答えは次の通りです。
+
+```text
+inputs:  [12, 45, 98]
+targets: [45, 98, 3]
+```
+
+`examples/02_cross_entropy.py` を実行すると、手計算したlossとPyTorchの `F.cross_entropy` が一致することを確認できます。
+
+### よくある誤解
+
+PyTorchの `F.cross_entropy` には、softmax後の確率ではなくlogitsを渡します。
+
+```text
+正しい: F.cross_entropy(logits, targets)
+避ける: F.cross_entropy(torch.softmax(logits), targets)
+```
+
 次章では、微分の直感について学びます。
 
 ここまでで、モデルが予測を出し、lossを計算するところまで見ました。

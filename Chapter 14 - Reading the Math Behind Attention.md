@@ -1731,6 +1731,33 @@ causal mask
 scores = scores.masked_fill(mask == 0, -inf)
 ```
 
+### 確認問題
+
+次の式を、PyTorchの計算に対応させて説明してください。
+
+```text
+Attention(Q, K, V) = softmax(QK^T / sqrt(d_k))V
+```
+
+答えは、たとえば次のようになります。
+
+```python
+scores = q @ k.transpose(-2, -1)
+scores = scores / math.sqrt(d_k)
+weights = torch.softmax(scores, dim=-1)
+out = weights @ v
+```
+
+`examples/03_attention.py` を実行すると、shapeとcausal maskの動きをまとめて確認できます。
+
+### よくある誤解
+
+Attention weightは、Valueそのものではありません。
+
+Attention weightは、Valueをどの割合で混ぜるかを決める重みです。
+
+また、causal maskはValueを消すのではなく、softmax前のscoreを `-inf` にして、未来位置の重みを0にします。
+
 この章を理解すると、Transformerの中心部分であるSelf-Attentionの数式が読めるようになります。
 
 次章では、ここまで学んだ数学を使って、PyTorchで小さなAttention計算をさらに実装として確認します。
