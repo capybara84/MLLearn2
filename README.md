@@ -5,6 +5,11 @@
 
 ChatGPT 5.5 と、Codex 5.5 によって作られています。
 
+## 読むための入口
+
+- [目次](Table%20of%20Contents.md)
+- [用語集](Glossary.md)
+
 ## サンプルコード
 
 本文で扱う計算を手元で確認できるように、`examples/` に短いPyTorchコードを置いています。

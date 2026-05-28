@@ -1,5 +1,9 @@
 # 第1章 なぜTransformerに数学が必要なのか
 
+**この章のゴール**
+
+Transformerの数式を「難しい記号の集まり」ではなく、ベクトル・行列・softmax・重み付き和の組み合わせとして見られるようになること。
+
 ## 1.1 Transformerは巨大な数式ではなく、ベクトル計算の積み重ねである
 
 『Attention Is All You Need』を初めて読むと、Transformerはとても難しい数学でできているように見えるかもしれません。

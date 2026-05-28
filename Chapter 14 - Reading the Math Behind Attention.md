@@ -1,5 +1,9 @@
 # 第14章 Attentionの数式を読む
 
+**この章のゴール**
+
+`Attention(Q, K, V) = softmax(QK^T / sqrt(d_k))V` を、日本語とPyTorchコードの両方で説明できるようになること。
+
 ## 14.1 Transformerの中心式
 
 この章では、Transformerの中心にあるAttentionの数式を読みます。
